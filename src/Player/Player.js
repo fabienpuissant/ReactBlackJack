@@ -11,8 +11,10 @@ export class Player extends Component {
             playercards: Array(card),
             score: card.value,
             end: false,
+            playerName: null,
         }
         this.handleEndClick = this.handleEndClick.bind(this);
+        this.handleRestartClick = this.handleRestartClick.bind(this);
     }
 
     handleCLick() {
@@ -23,11 +25,15 @@ export class Player extends Component {
         this.setState({
             playercards: newCards,
         });
-        this.state.score = this.state.score + card.value;
+
+        this.setState((prevState, props) => ({
+            score: prevState.score + card.value
+        }));
+
 
 
         //Check the end of the game 
-        if (this.state.score >= 21) {
+        if (this.state.score + card.value >= 21) {
             if (!this.state.end) {
                 this.props.endGame(this.state.score);
             }
@@ -50,13 +56,13 @@ export class Player extends Component {
     }
 
     handleRestartClick() {
-        this.props.restartGame();
         const card = this.props.randomCard();
         this.setState({
             playercards: [card],
             score: card.value,
             end: false,
         });
+        this.props.restartGame();
     }
 
     render() {

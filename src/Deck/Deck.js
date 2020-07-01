@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import Player from '../Player/Player';
 import Bank from '../Bank/Bank';
+import { mount, render, shallow } from 'enzyme'
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
 export class Deck extends Component {
 
+    initialState = {
+        cards: this.initCards(),
+        end: false,
+    }
+
     constructor(props) {
         super(props);
-        const cards = this.initCards();
-        this.state = {
-            cards: cards,
-            end: false,
-
-        };
+        this.state = this.initialState;
         this.randomCard = this.randomCard.bind(this);
         this.endGame = this.endGame.bind(this);
         this.restartGame = this.restartGame.bind(this);
@@ -48,6 +51,7 @@ export class Deck extends Component {
                     imagePath: "Images/" + cardNumber[j] + cardSymbol[i] + ".png",
                     value: value,
                     color: cardSymbol[i],
+                    number: cardNumber[j]
                 });
             }
         }
@@ -55,7 +59,6 @@ export class Deck extends Component {
     }
 
     endGame(playerScore) {
-        console.log(playerScore);
         var bankPlay = true;
         var bankScore = 0;
         var card;
@@ -80,13 +83,11 @@ export class Deck extends Component {
     }
 
     restartGame() {
-        const initialCards = this.initCards();
-        console.log(initialCards.length);
-        this.state.cards = initialCards;
+        const newCards = this.initCards();
         this.setState({
+            cards: newCards,
             end: false,
         });
-        console.log(this.state.cards.length);
     }
 
     render() {
@@ -101,5 +102,6 @@ export class Deck extends Component {
         )
     }
 }
+
 
 export default Deck
